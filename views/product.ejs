@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Product</title>
+</head>
+<body>
+  <h1>Add New Product</h1>
+  
+  <form action="/admin/products" method="POST" >
+    <label>Title:</label><br>
+    <input type="text" name="title" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description" required></textarea><br><br>
+
+    <label>Short Description:</label><br>
+    <input type="text" name="shortDescription"><br><br>
+
+    <label>Category:</label><br>
+    <input type="text" name="category" required><br><br>
+
+    <label>Brand:</label><br>
+    <input type="text" name="brand"><br><br>
+
+    <label>Tags (comma separated):</label><br>
+    <input type="text" name="tags"><br><br>
+
+    <label>Price:</label><br>
+    <input type="number" name="price" required><br><br>
+
+    <label>Discount Price:</label><br>
+    <input type="number" name="discountPrice"><br><br>
+
+    <label>Stock Count:</label><br>
+    <input type="number" name="stockCount"><br><br>
+
+    <label>Thumbnail Image URL:</label><br>
+    <input type="text" name="thumbnail"><br><br>
+
+    <label>Images (multiple URLs separated by comma):</label><br>
+    <input type="text" name="images"><br><br>
+
+    <label>Weight (kg):</label><br>
+    <input type="number" name="weight" step="0.01"><br><br>
+
+    <label>Dimensions (LxWxH in cm):</label><br>
+    <input type="number" name="length" placeholder="Length">
+    <input type="number" name="width" placeholder="Width">
+    <input type="number" name="height" placeholder="Height"><br><br>
+
+    <label>Shipping Cost:</label><br>
+    <input type="number" name="shippingCost"><br><br>
+
+    <label>Is Featured:</label>
+    <input type="checkbox" name="isFeatured"><br><br>
+
+    <button type="submit">Add Product</button>
+  </form>
+</body>
+</html>

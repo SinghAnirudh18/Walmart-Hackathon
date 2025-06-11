@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products - E-Commerce Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .product-card {
+            height: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            text-decoration: none;
+            line-height: 1.4;
+        }
+        
+        .product-title:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .price-section {
+            margin: 10px 0;
+        }
+        
+        .original-price {
+            color: #6c757d;
+            text-decoration: line-through;
+            font-size: 0.9rem;
+        }
+        
+        .discount-price {
+            color: #dc3545;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .regular-price {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .rating {
+            color: #ffc107;
+            font-size: 0.9rem;
+        }
+        
+        .badge-featured {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+        }
+        
+        .badge-discount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #dc3545;
+        }
+        
+        .badge-stock {
+            font-size: 0.75rem;
+        }
+        
+        .product-category {
+            color: #6c757d;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-brand {
+            color: #495057;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .card-body {
+            padding: 1.2rem;
+        }
+        
+        .btn-view-product {
+            width: 100%;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            padding: 10px;
+            font-weight: 500;
+        }
+        
+        .btn-view-product:hover {
+            background: linear-gradient(45deg, #0056b3, #004085);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 50px;
+        }
+        
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .product-grid {
+            margin-bottom: 50px;
+        }
+        
+        .no-products {
+            text-align: center;
+            padding: 100px 0;
+            color: #6c757d;
+        }
+        
+        .stats-section {
+            background: #f8f9fa;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .product-tags {
+            margin-top: 10px;
+        }
+        
+        .tag {
+            background: #e9ecef;
+            color: #495057;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin: 1px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-store"></i> E-Commerce Store
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Welcome to Our Store</h1>
+            <p class="lead mb-4">Discover amazing products with great deals</p>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" placeholder="Search products..." id="searchInput">
+                        <button class="btn btn-light" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter"></i> 
+                        Showing <%= products.length %> Product<%= products.length !== 1 ? 's' : '' %>
+                    </h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-end">
+                        <select class="form-select" style="width: auto;" id="sortProducts">
+                            <option value="newest">Sort by: Newest</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="popular">Most Popular</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="product-grid">
+            <% if (products && products.length > 0) { %>
+                <div class="row" id="productsContainer">
+                    <% products.forEach(product => { %>
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 product-item" 
+                             data-category="<%= product.category.toLowerCase() %>"
+                             data-price="<%= product.discountPrice || product.price %>"
+                             data-rating="<%= product.averageRating %>"
+                             data-popularity="<%= product.soldCount %>">
+                            <div class="card product-card">
+                                <div class="position-relative">
+                                    <!-- Product Image -->
+                                    <img src="<%= product.thumbnail || (product.images && product.images.length > 0 ? product.images[0].url : '/images/placeholder.jpg') %>" 
+                                         alt="<%= product.title %>" 
+                                         class="card-img-top product-image">
+                                    
+                                    <!-- Badges -->
+                                    <% if (product.isFeatured) { %>
+                                        <span class="badge badge-featured">
+                                            <i class="fas fa-star"></i> Featured
+                                        </span>
+                                    <% } %>
+                                    
+                                    <% if (product.discountPrice && product.discountPrice < product.price) { %>
+                                        <span class="badge badge-discount">
+                                            <%= Math.round(((product.price - product.discountPrice) / product.price) * 100) %>% OFF
+                                        </span>
+                                    <% } %>
+                                </div>
+                                
+                                <div class="card-body d-flex flex-column">
+                                    <!-- Category -->
+                                    <div class="product-category mb-1">
+                                        <i class="fas fa-tag"></i> <%= product.category %>
+                                    </div>
+                                    
+                                    <!-- Brand -->
+                                    <% if (product.brand) { %>
+                                        <div class="product-brand mb-2">
+                                            <%= product.brand %>
+                                        </div>
+                                    <% } %>
+                                    
+                                    <!-- Title -->
+                                    <h5 class="card-title">
+                                        <a href="/product/<%= product._id %>" class="product-title">
+                                            <%= product.title %>
+                                        </a>
+                                    </h5>
+                                    
+                                    <!-- Description -->
+                                    <p class="card-text text-muted small mb-2">
+                                        <%= product.description.length > 100 ? product.description.substring(0, 100) + '...' : product.description %>
+                                    </p>
+                                    
+                                    <!-- Tags -->
+                                    <% if (product.tags && product.tags.length > 0) { %>
+                                        <div class="product-tags mb-2">
+                                            <% product.tags.slice(0, 3).forEach(tag => { %>
+                                                <span class="tag"><%= tag %></span>
+                                            <% }); %>
+                                            <% if (product.tags.length > 3) { %>
+                                                <span class="tag">+<%= product.tags.length - 3 %> more</span>
+                                            <% } %>
+                                        </div>
+                                    <% } %>
+                                    
+                                    <!-- Rating -->
+                                    <div class="mb-2">
+                                        <div class="rating">
+                                            <% for (let i = 1; i <= 5; i++) { %>
+                                                <% if (i <= product.averageRating) { %>
+                                                    <i class="fas fa-star"></i>
+                                                <% } else if (i - 0.5 <= product.averageRating) { %>
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                <% } else { %>
+                                                    <i class="far fa-star"></i>
+                                                <% } %>
+                                            <% } %>
+                                        </div>
+                                        <small class="text-muted">
+                                            (<%= product.numReviews %> review<%= product.numReviews !== 1 ? 's' : '' %>)
+                                        </small>
+                                    </div>
+                                    
+                                    <!-- Price -->
+                                    <div class="price-section mb-3">
+                                        <% if (product.discountPrice && product.discountPrice < product.price) { %>
+                                            <div class="discount-price">$<%= product.discountPrice.toFixed(2) %></div>
+                                            <div class="original-price">$<%= product.price.toFixed(2) %></div>
+                                        <% } else { %>
+                                            <div class="regular-price">$<%= product.price.toFixed(2) %></div>
+                                        <% } %>
+                                        
+                                        <% if (product.shippingCost && product.shippingCost > 0) { %>
+                                            <small class="text-muted d-block">+ $<%= product.shippingCost.toFixed(2) %> shipping</small>
+                                        <% } else { %>
+                                            <small class="text-success d-block">Free shipping</small>
+                                        <% } %>
+                                    </div>
+                                    
+                                    <!-- Stock Status -->
+                                    <div class="mb-3">
+                                        <% if (product.inStock && product.stockCount > 0) { %>
+                                            <span class="badge bg-success badge-stock">
+                                                <i class="fas fa-check"></i> In Stock (<%= product.stockCount %>)
+                                            </span>
+                                        <% } else { %>
+                                            <span class="badge bg-danger badge-stock">
+                                                <i class="fas fa-times"></i> Out of Stock
+                                            </span>
+                                        <% } %>
+                                        
+                                        <% if (product.soldCount > 0) { %>
+                                            <small class="text-muted d-block mt-1">
+                                                <%= product.soldCount %> sold
+                                            </small>
+                                        <% } %>
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="mt-auto">
+                                        <a href="/product/<%= product._id %>" class="btn btn-primary btn-view-product">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+                                        <% if (product.inStock && product.stockCount > 0) { %>
+                                            <button class="btn btn-outline-success btn-sm mt-2 w-100" onclick="addToCart('<%= product._id %>')">
+                                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                                            </button>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="no-products">
+                    <i class="fas fa-box-open fa-5x mb-4"></i>
+                    <h3>No Products Found</h3>
+                    <p>We're working on adding new products. Please check back later!</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <% if (products && products.length > 0) { %>
+        <section class="stats-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number"><%= products.length %></div>
+                            <div>Total Products</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">
+                                <%= products.filter(p => p.isFeatured).length %>
+                            </div>
+                            <div>Featured Products</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">
+                                <%= [...new Set(products.map(p => p.category))].length %>
+                            </div>
+                            <div>Categories</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">
+                                <%= products.reduce((sum, p) => sum + p.soldCount, 0) %>
+                            </div>
+                            <div>Items Sold</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <% } %>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>E-Commerce Store</h5>
+                    <p>Your trusted online shopping destination</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2025 E-Commerce Store. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const products = document.querySelectorAll('.product-item');
+            
+            products.forEach(product => {
+                const title = product.querySelector('.product-title').textContent.toLowerCase();
+                const category = product.dataset.category;
+                const brand = product.querySelector('.product-brand')?.textContent.toLowerCase() || '';
+                
+                if (title.includes(searchTerm) || category.includes(searchTerm) || brand.includes(searchTerm)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        });
+
+        // Sort functionality
+        document.getElementById('sortProducts').addEventListener('change', function(e) {
+            const sortBy = e.target.value;
+            const container = document.getElementById('productsContainer');
+            const products = Array.from(container.querySelectorAll('.product-item'));
+            
+            products.sort((a, b) => {
+                switch(sortBy) {
+                    case 'price-low':
+                        return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+                    case 'price-high':
+                        return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+                    case 'rating':
+                        return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+                    case 'popular':
+                        return parseInt(b.dataset.popularity) - parseInt(a.dataset.popularity);
+                    default:
+                        return 0;
+                }
+            });
+            
+            products.forEach(product => container.appendChild(product));
+        });
+
+        // Add to Cart functionality
+        function addToCart(productId) {
+            // Add your cart logic here
+            alert('Product added to cart! (Product ID: ' + productId + ')');
+        }
+    </script>
+</body>
+</html>
