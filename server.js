@@ -1,9 +1,11 @@
 const express = require('express')
 const Product = require('./mongodb/products')
+const path = require('path')
 const app = express();
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname,'public')));
 app.set("view engine",'ejs')
 app.get('/',async (req,res)=>{
     const products = await Product.find();
