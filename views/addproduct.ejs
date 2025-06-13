@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Premium Product</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-gold: #B8941F;
+            --premium-black: #1a1a1a;
+            --premium-white: #ffffff;
+            --text-muted: #888;
+            --light-gray: #f8f9fa;
+            --border-color: #e1e5e9;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    #8B4513 0px,
+                    #8B4513 2px,
+                    transparent 2px,
+                    transparent 20px
+                ),
+                repeating-linear-gradient(
+                    -45deg,
+                    #A0522D 0px,
+                    #A0522D 2px,
+                    transparent 2px,
+                    transparent 20px
+                ),
+                linear-gradient(135deg, #F5F5DC 0%, #FFFFFF 100%);
+            min-height: 100vh;
+            color: var(--premium-black);
+            position: relative;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        body:hover {
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                   
+                   #8B4513 0px,
+                    #8B4513 1px,
+                    transparent .5px,
+                    transparent 20px
+                ),
+                repeating-linear-gradient(
+                    -45deg,
+                    #8B4513 0px,
+                    #8B4513 1px,
+                    transparent .5px,
+                    transparent .5px
+                ),
+                linear-gradient(135deg, #F0E68C 0%, #FFFAF0 100%);
+        }
+
+        .display-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Floating Background Elements */
+        .floating-bg-element {
+            position: fixed;
+            color: var(--gold);
+            opacity: 0.1;
+            z-index: 1;
+            animation: floatSlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .floating-bg-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 4rem;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-2 {
+            top: 30%;
+            right: 8%;
+            font-size: 3rem;
+            animation-delay: 2s;
+        }
+
+        .floating-bg-3 {
+            bottom: 20%;
+            left: 10%;
+            font-size: 5rem;
+            animation-delay: 4s;
+        }
+
+        .floating-bg-4 {
+            bottom: 40%;
+            right: 5%;
+            font-size: 2.5rem;
+            animation-delay: 6s;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #ffffff 100%);
+            min-height: 100vh;
+            color: var(--premium-black);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .display-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Floating Background Elements */
+        .floating-bg-element {
+            position: fixed;
+            color: var(--gold);
+            opacity: 0.1;
+            z-index: 1;
+            animation: floatSlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .floating-bg-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 4rem;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-2 {
+            top: 30%;
+            right: 8%;
+            font-size: 3rem;
+            animation-delay: 2s;
+        }
+
+        .floating-bg-3 {
+            bottom: 20%;
+            left: 10%;
+            font-size: 5rem;
+            animation-delay: 4s;
+        }
+
+        .floating-bg-4 {
+            bottom: 40%;
+            right: 5%;
+            font-size: 2.5rem;
+            animation-delay: 6s;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-30px) rotate(2deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(-2deg);
+            }
+            75% {
+                transform: translateY(-25px) rotate(1deg);
+            }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 50%, #CD853F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            animation: expand 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.2); }
+        }
+
+        @keyframes expand {
+            0%, 100% { width: 100px; opacity: 0.7; }
+            50% { width: 150px; opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(212, 175, 55, 0.2);
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--dark-gold) 50%, var(--gold) 100%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .form-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            animation: sweep 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes sweep {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-row.two-cols {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-row.three-cols {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* Form Groups */
+        .form-group {
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--premium-black);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: #e74c3c;
+            margin-left: 4px;
+        }
+
+        /* Input Styles */
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: var(--premium-white);
+            color: var(--premium-black);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Enhanced Checkbox Styles */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(212, 175, 55, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checkbox-container:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateX(5px);
+        }
+
+        .checkbox-input {
+            width: 24px;
+            height: 24px;
+            accent-color: var(--gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-input:checked + .checkbox-label {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .checkbox-label {
+            font-weight: 500;
+            color: var(--premium-black);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        /* Dimensions Group */
+        .dimensions-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Cool Progress Indicator */
+        .form-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), #CD853F, var(--dark-gold));
+            z-index: 1000;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Particle Effect Container */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 4s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Enhanced Form Labels */
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--premium-black);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .form-label:hover {
+            color: var(--gold);
+            transform: translateX(3px);
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: #e74c3c;
+            margin-left: 4px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Checkbox Styles */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--gold);
+        }
+
+        .checkbox-label {
+            font-weight: 500;
+            color: var(--premium-black);
+            cursor: pointer;
+        }
+
+        /* Dimensions Group */
+        .dimensions-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: var(--premium-black);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, #FFD700 0%, var(--gold) 100%);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Icon Decorations */
+        .section-icon {
+            color: var(--gold);
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        /* Features Container */
+        .features-container {
+            margin-bottom: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .feature-item .form-input {
+            flex: 1;
+        }
+
+        .remove-feature-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .remove-feature-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+
+        .add-feature-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: var(--premium-black);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .add-feature-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row.two-cols,
+            .form-row.three-cols {
+                grid-template-columns: 1fr;
+            }
+
+            .dimensions-group {
+                grid-template-columns: 1fr;
+            }
+
+            .floating-bg-element {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .form-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .submit-btn {
+                padding: 14px 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Indicator -->
+    <div class="form-progress" id="formProgress"></div>
+
+    <!-- Particle Effect Container -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Floating Background Elements -->
+    <div class="floating-bg-element floating-bg-1"><i class="fas fa-star"></i></div>
+    <div class="floating-bg-element floating-bg-2"><i class="fas fa-gem"></i></div>
+    <div class="floating-bg-element floating-bg-3"><i class="fas fa-crown"></i></div>
+    <div class="floating-bg-element floating-bg-4"><i class="fas fa-medal"></i></div>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title display-font">Add Premium Product</h1>
+            <p class="page-subtitle">Create a new product listing with detailed information</p>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <form action="/admin/products" method="POST">
+                <div class="form-grid">
+                    <!-- Basic Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required" for="title">
+                                <i class="fas fa-tag section-icon"></i>Product Title
+                            </label>
+                            <input type="text" name="title" id="title" class="form-input" required placeholder="Enter product title">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required" for="description">
+                                <i class="fas fa-align-left section-icon"></i>Full Description
+                            </label>
+                            <textarea name="description" id="description" class="form-input form-textarea" required placeholder="Detailed product description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="shortDescription">
+                                <i class="fas fa-file-alt section-icon"></i>Short Description
+                            </label>
+                            <input type="text" name="shortDescription" id="shortDescription" class="form-input" placeholder="Brief product summary">
+                        </div>
+                    </div>
+
+                    <!-- Category & Brand -->
+                    <div class="form-row two-cols">
+                        <div class="form-group">
+                            <label class="form-label required" for="category">
+                                <i class="fas fa-folder section-icon"></i>Category
+                            </label>
+                            <input type="text" name="category" id="category" class="form-input" required placeholder="Product category">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="brand">
+                                <i class="fas fa-copyright section-icon"></i>Brand
+                            </label>
+                            <input type="text" name="brand" id="brand" class="form-input" placeholder="Brand name">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="tags">
+                                <i class="fas fa-tags section-icon"></i>Tags (comma separated)
+                            </label>
+                            <input type="text" name="tags" id="tags" class="form-input" placeholder="tag1, tag2, tag3">
+                        </div>
+                    </div>
+
+                    <!-- Pricing -->
+                    <div class="form-row two-cols">
+                        <div class="form-group">
+                            <label class="form-label required" for="price">
+                                <i class="fas fa-dollar-sign section-icon"></i>Price
+                            </label>
+                            <input type="number" name="price" id="price" class="form-input" required placeholder="0.00" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="discountPrice">
+                                <i class="fas fa-percentage section-icon"></i>Discount Price
+                            </label>
+                            <input type="number" name="discountPrice" id="discountPrice" class="form-input" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="stockCount">
+                                <i class="fas fa-boxes section-icon"></i>Stock Count
+                            </label>
+                            <input type="number" name="stockCount" id="stockCount" class="form-input" placeholder="0">
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="thumbnail">
+                                <i class="fas fa-image section-icon"></i>Thumbnail Image URL
+                            </label>
+                            <input type="text" name="thumbnail" id="thumbnail" class="form-input" placeholder="https://example.com/image.jpg">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="images">
+                                <i class="fas fa-images section-icon"></i>Additional Images (comma separated URLs)
+                            </label>
+                            <input type="text" name="images" id="images" class="form-input" placeholder="url1, url2, url3">
+                        </div>
+                    </div>
+
+                    <!-- Physical Properties -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="weight">
+                                <i class="fas fa-weight section-icon"></i>Weight (kg)
+                            </label>
+                            <input type="number" name="weight" id="weight" class="form-input" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-cube section-icon"></i>Dimensions (cm)
+                            </label>
+                            <div class="dimensions-group">
+                                <input type="number" name="length" class="form-input" placeholder="Length" step="0.01">
+                                <input type="number" name="width" class="form-input" placeholder="Width" step="0.01">
+                                <input type="number" name="height" class="form-input" placeholder="Height" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="shippingCost">
+                                <i class="fas fa-shipping-fast section-icon"></i>Shipping Cost
+                            </label>
+                            <input type="number" name="shippingCost" id="shippingCost" class="form-input" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+
+                    <!-- Features Section -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-list-ul section-icon"></i>Product Features
+                            </label>
+                            <div class="features-container" id="featuresContainer">
+                                <div class="feature-item">
+                                    <input type="text" name="features" class="form-input" placeholder="Enter a product feature">
+                                    <button type="button" class="remove-feature-btn" onclick="removeFeature(this)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-feature-btn" onclick="addFeature()">
+                                <i class="fas fa-plus"></i> Add Feature
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Featured Product -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="checkbox-container">
+                                <input type="checkbox" name="isFeatured" id="isFeatured" class="checkbox-input">
+                                <label class="checkbox-label" for="isFeatured">
+                                    <i class="fas fa-star section-icon"></i>Mark as Featured Product
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-plus"></i>
+                        Add Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Progress Bar Functionality
+        function updateProgress() {
+            const form = document.querySelector('form');
+            const inputs = form.querySelectorAll('input[required], textarea[required]');
+            const progressBar = document.getElementById('formProgress');
+            
+            let filledInputs = 0;
+            inputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    filledInputs++;
+                }
+            });
+            
+            const progress = (filledInputs / inputs.length) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        // Particle Effect
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            
+            document.getElementById('particles').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 5000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 300);
+
+        // Mouse trail effect
+        let mouseTrail = [];
+        document.addEventListener('mousemove', function(e) {
+            mouseTrail.push({x: e.clientX, y: e.clientY, time: Date.now()});
+            
+            // Remove old trail points
+            mouseTrail = mouseTrail.filter(point => Date.now() - point.time < 1000);
+            
+            // Create trail effect
+            if (mouseTrail.length > 1) {
+                const trail = document.createElement('div');
+                trail.style.position = 'fixed';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                trail.style.width = '6px';
+                trail.style.height = '6px';
+                trail.style.background = 'var(--gold)';
+                trail.style.borderRadius = '50%';
+                trail.style.pointerEvents = 'none';
+                trail.style.zIndex = '999';
+                trail.style.opacity = '0.7';
+                trail.style.animation = 'fadeOut 0.8s ease-out forwards';
+                
+                document.body.appendChild(trail);
+                
+                setTimeout(() => trail.remove(), 800);
+            }
+        });
+
+        // Enhanced form interactions
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('input', updateProgress);
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.3s ease';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Fade out animation for form sections
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.form-row').forEach(row => {
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(30px)';
+            row.style.transition = 'all 0.6s ease';
+            observer.observe(row);
+        });
+
+        function addFeature() {
+            const container = document.getElementById('featuresContainer');
+            const featureItem = document.createElement('div');
+            featureItem.className = 'feature-item';
+            featureItem.style.opacity = '0';
+            featureItem.style.transform = 'translateX(-20px)';
+            featureItem.innerHTML = `
+                <input type="text" name="features" class="form-input" placeholder="Enter a product feature">
+                <button type="button" class="remove-feature-btn" onclick="removeFeature(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(featureItem);
+            
+            // Animate in
+            setTimeout(() => {
+                featureItem.style.transition = 'all 0.4s ease';
+                featureItem.style.opacity = '1';
+                featureItem.style.transform = 'translateX(0)';
+            }, 10);
+        }
+
+        function removeFeature(button) {
+            const featureItem = button.parentElement;
+            const container = document.getElementById('featuresContainer');
+            
+            if (container.children.length > 1) {
+                featureItem.style.transition = 'all 0.4s ease';
+                featureItem.style.opacity = '0';
+                featureItem.style.transform = 'translateX(20px)';
+                
+                setTimeout(() => {
+                    featureItem.remove();
+                }, 400);
+            }
+        }
+
+        // Enhanced form validation with animations
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const requiredFields = document.querySelectorAll('.form-input[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    field.style.animation = 'shake 0.5s ease-in-out';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = 'var(--gold)';
+                    field.style.animation = 'none';
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                // Create notification
+                const notification = document.createElement('div');
+                notification.textContent = 'Please fill in all required fields.';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #e74c3c;
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    z-index: 1000;
+                    animation: slideIn 0.3s ease;
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        });
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                to { opacity: 0; transform: scale(0); }
+            }
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize progress
+        updateProgress();
+
+        // Real-time validation feedback with enhanced animations
+        document.querySelectorAll('.form-input[required]').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    this.style.borderColor = '#e74c3c';
+                    this.style.animation = 'pulse 1s ease-in-out';
+                } else {
+                    this.style.borderColor = 'var(--gold)';
+                    this.style.animation = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

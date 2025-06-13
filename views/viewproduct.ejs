@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= product.title %> - Product Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .brand {
+      color: #555;
+      margin-bottom: 20px;
+    }
+    .main {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .images {
+      flex: 1;
+    }
+    .images img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .thumbs {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .thumbs img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .details {
+      flex: 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .price {
+      font-size: 24px;
+      color: red;
+      margin-bottom: 5px;
+    }
+    .original-price {
+      text-decoration: line-through;
+      color: #888;
+      font-size: 14px;
+    }
+    .section-title {
+      font-weight: bold;
+      margin: 20px 0 10px;
+    }
+    .variant-box {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+    }
+    .availability {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .green {
+      color: green;
+    }
+    .red {
+      color: red;
+    }
+    .tags {
+      margin-top: 10px;
+    }
+    .tag {
+      display: inline-block;
+      background-color: #e0ecff;
+      color: #0073e6;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin: 2px;
+    }
+    .description, .reviews {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .review {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .review:last-child {
+      border-bottom: none;
+    }
+    .review-name {
+      font-weight: bold;
+    }
+    .review-date {
+      font-size: 12px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title"><%= product.title %></h1>
+    <p class="brand">Brand: <%= product.brand || 'N/A' %></p>
+
+    <div class="main">
+      <!-- Images -->
+      <div class="images">
+        <img src="<%= product.thumbnail %>" alt="Thumbnail">
+        <div class="thumbs">
+          <% product.images.forEach(img => { %>
+            <img src="<%= img.url %>" alt="<%= img.alt %>">
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Product Details -->
+      <div class="details">
+        <% if (product.discountPrice) { %>
+          <div class="price">₹<%= product.discountPrice %></div>
+          <div class="original-price">₹<%= product.price %></div>
+        <% } else { %>
+          <div class="price">₹<%= product.price %></div>
+        <% } %>
+
+        <p><%= product.shortDescription %></p>
+
+        <% if (product.variants.length > 0) { %>
+          <div class="section-title">Available Variants:</div>
+          <% product.variants.forEach(v => { %>
+            <div class="variant-box">
+              Color: <%= v.color %>, Size: <%= v.size %>, ₹<%= v.price %> (Stock: <%= v.stockCount %>)
+            </div>
+          <% }) %>
+        <% } %>
+
+        <div class="availability">
+          Availability:
+          <span class="<%= product.inStock ? 'green' : 'red' %>">
+            <%= product.inStock ? 'In Stock' : 'Out of Stock' %>
+          </span>
+        </div>
+        <!-- Action Buttons -->
+<div style="margin-top: 20px;">
+  <% if (product.inStock) { %>
+    <button onclick="openCartOptions()" class="btn btn-success" style="padding: 10px 20px; margin-right: 10px;">
+      🛒 Add to Cart
+    </button>
+    <button onclick="openFriendCartForm()" class="btn btn-outline-primary" style="padding: 10px 20px;">
+      👥 Add to Cart with Friends
+    </button>
+  <% } else { %>
+    <p style="color: red;">This item is currently out of stock.</p>
+  <% } %>
+</div>
+
+        <% if (product.tags.length > 0) { %>
+          <div class="tags">
+            <% product.tags.forEach(tag => { %>
+              <span class="tag"><%= tag %></span>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+      <div class="section-title">Description</div>
+      <p><%= product.description %></p>
+    </div>
+
+    <!-- Reviews -->
+    <% if (product.reviews.length > 0) { %>
+      <div class="reviews">
+        <div class="section-title">Customer Reviews</div>
+        <% product.reviews.forEach(review => { %>
+          <div class="review">
+            <div class="review-name"><%= review.name %> - <%= review.rating %>/5</div>
+            <div class="review-date"><%= new Date(review.date).toLocaleDateString() %></div>
+            <p><%= review.comment %></p>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="reviews">
+        <p>No reviews yet.</p>
+      </div>
+    <% } %>
+
+  </div>
+<!-- Overlay -->
+<div id="overlay" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 99;" onclick="closeCartForms()"></div>
+
+<!-- Cart Options Modal -->
+<div id="cartForm" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:#fff; padding:30px; border-radius:10px; z-index:100; box-shadow:0 0 20px rgba(0,0,0,0.2); max-width: 400px;">
+  <h3>Add to Cart</h3>
+  <p>Do you want to add this item alone or with friends?</p>
+  <button onclick="addToCartDirect()" class="btn btn-success" style="margin-right: 10px;">Just Me</button>
+  <button onclick="switchToFriendForm()" class="btn btn-outline-primary">With Friends</button>
+</div>
+
+<!-- Add With Friends Form -->
+<div id="friendForm" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:#fff; padding:30px; border-radius:10px; z-index:100; box-shadow:0 0 20px rgba(0,0,0,0.2); max-width: 400px;">
+  <h3>Add to Cart with Friends</h3>
+  <form onsubmit="return addToCartWithFriends()">
+    <label for="emails">Friends' Emails (comma-separated):</label>
+    <input type="text" id="emails" class="form-control" placeholder="e.g. friend1@example.com, friend2@example.com" required>
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    <button type="button" onclick="closeCartForms()" class="btn btn-link mt-2">Cancel</button>
+  </form>
+</div>
+
+</body>
+<script>
+    
+  function openCartOptions() {
+    document.getElementById('cartForm').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }
+
+  function openFriendCartForm() {
+    document.getElementById('friendForm').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }
+
+  function closeCartForms() {
+    document.getElementById('cartForm').style.display = 'none';
+    document.getElementById('friendForm').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  }
+
+  function switchToFriendForm() {
+    document.getElementById('cartForm').style.display = 'none';
+    document.getElementById('friendForm').style.display = 'block';
+  }
+
+  function addToCartDirect() {
+    alert("Product added to cart!");
+    closeCartForms();
+    // Implement actual add-to-cart logic here
+  }
+
+  function addToCartWithFriends() {
+    const emails = document.getElementById('emails').value;
+    alert("Shared with: " + emails);
+    closeCartForms();
+    // Implement logic to handle shared cart
+    return false;
+  }
+</script>
+
+
+</html>

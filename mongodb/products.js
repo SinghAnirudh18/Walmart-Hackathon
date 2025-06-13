@@ -1,14 +1,19 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb://localhost/walmart", {
-    
+// Mongoose Connection
+const mongoURI = "mongodb+srv://anirudhsing308:qwerty12345@cluster0.feo95lg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose.connect(mongoURI, {
+  
 })
-.then(() => {
+  .then(() => {
     console.log("Database connected");
-})
-.catch((err) => {
+  })
+  .catch((err) => {
     console.error("Database connection error:", err);
-});
+  });
+
+
 // Review Schema
 const reviewSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -62,7 +67,7 @@ const productSchema = new mongoose.Schema({
   shippingCost: Number,
 
   variants: [variantSchema],
-
+  features:{type:Array},
   isFeatured: { type: Boolean, default: false },
   soldCount: { type: Number, default: 0 },
 

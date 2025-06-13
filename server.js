@@ -10,7 +10,7 @@ app.set("view engine",'ejs')
 app.get('/',async (req,res)=>{
     const products = await Product.find();
     console.log(products)
-    res.render('index',{ products })
+    res.render('ani',{ products })
 })
 
 async function sanitizeProducts() {
@@ -26,7 +26,7 @@ async function sanitizeProducts() {
 
 sanitizeProducts();
 app.get('/admin/products', (req, res) => {
-  res.render('product');
+  res.render('addproduct');
 });
 
 app.post('/admin/products', async (req, res) => {
@@ -34,7 +34,7 @@ app.post('/admin/products', async (req, res) => {
     const {
       title, description, shortDescription, category, brand, tags,
       price, discountPrice, stockCount, thumbnail, images, weight,
-      length, width, height, shippingCost, isFeatured
+      length, width, height, shippingCost,features, isFeatured
     } = req.body;
     console.log(req.body);
     const product = new Product({
@@ -54,6 +54,7 @@ app.post('/admin/products', async (req, res) => {
         length, width, height
       },
       shippingCost,
+      features,
       isFeatured: !!isFeatured
     });
 
@@ -64,4 +65,12 @@ app.post('/admin/products', async (req, res) => {
     res.status(500).send("Error saving product");
   }
 });
+<<<<<<< HEAD
 app.listen(3000)
+=======
+app.get('/product/:id',async (req,res)=>{
+    const product = await Product.findOne({_id:req.params.id})
+    res.render("viewproduct",{product})
+})
+app.listen(3000)
+>>>>>>> c13d688 (Set up mongodb)
