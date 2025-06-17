@@ -1326,53 +1326,7 @@ document.addEventListener('touchend', (e) => {
 
 
    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="container">
-            <div class="section-title">
-                <h2 class="display-font">Why Choose Daily Premium?</h2>
-                <p class="lead">Experience the pinnacle of online shopping</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6">
-                    <div class="feature-card animate-on-scroll">
-                        <div class="feature-icon">
-                            <i class="fas fa-shipping-fast"></i>
-                        </div>
-                        <h4 class="accent-font">Premium Delivery</h4>
-                        <p>White-glove delivery service with premium packaging and personalized care for every order.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="feature-card animate-on-scroll">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h4 class="accent-font">Secure Transactions</h4>
-                        <p>Bank-level security with encrypted payments and fraud protection for complete peace of mind.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="feature-card animate-on-scroll">
-                        <div class="feature-icon">
-                            <i class="fas fa-concierge-bell"></i>
-                        </div>
-                        <h4 class="accent-font">Concierge Service</h4>
-                        <p>Personal shopping assistant and dedicated support for an unparalleled luxury experience.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="feature-card animate-on-scroll">
-                        <div class="feature-icon">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <h4 class="accent-font">Premium Quality</h4>
-                        <p>Handpicked premium products with authenticity guarantee and lifetime quality assurance.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    
     <!-- Products Section -->
     <section class="products-section" id="products">
         <div class="container">
@@ -1448,10 +1402,14 @@ document.addEventListener('touchend', (e) => {
                                         <button class="quick-view-btn" onclick="quickView('<%= product._id %>')">
                                             <i class="fas fa-eye"></i> Quick View
                                         </button>
-                                        <a href="/viewproduct/<%= product._id %>" class="btn btn-primary btn-view-product">
-                                            <i class="fas fa-eye"></i> View Details
-                                        </a>
                                     </div>
+                                    <script>
+                                        function quickView(productId) {
+                                            window.location.href = `/viewproduct/${productId}`;
+                                        }
+                                    </script>
+
+
                                 </div>
                                 
                                 <div class="product-info">
@@ -1482,21 +1440,21 @@ document.addEventListener('touchend', (e) => {
                                     
                                     <div class="product-price">
                                         <% if (product.discountPrice && product.discountPrice < product.price) { %>
-                                            <div class="discount-price">$<%= product.discountPrice.toFixed(2) %></div>
-                                            <div class="original-price">$<%= product.price.toFixed(2) %></div>
+                                            <div class="discount-price">₹<%= product.discountPrice.toFixed(2) %></div>
+                                            <div class="original-price">₹<%= product.price.toFixed(2) %></div>
                                         <% } else { %>
-                                            <div class="regular-price">$<%= product.price.toFixed(2) %></div>
+                                            <div class="regular-price">₹<%= product.price.toFixed(2) %></div>
                                         <% } %>
                                         
                                         <% if (product.shippingCost && product.shippingCost > 0) { %>
-                                            <small class="text-muted d-block">+ $<%= product.shippingCost.toFixed(2) %> shipping</small>
+                                            <small class="text-muted d-block">+ ₹<%= product.shippingCost.toFixed(2) %> shipping</small>
                                         <% } else { %>
                                             <small class="text-success d-block">Free shipping</small>
                                         <% } %>
                                     </div>
 
                                     <% if (product.inStock !== false && (product.stockCount || 0) > 0) { %>
-                                        <a href="/addtocart/<%= product._id %>" class="add-to-cart-btn micro-interaction" onclick="return addToCartHandler(event, '<%= product._id %>')">
+                                        <a href="/addtocart/<%= product._id %>" class="add-to-cart-btn micro-interaction">
                                             <i class="fas fa-shopping-cart"></i> Add to Cart
                                         </a>
                                     <% } else { %>
@@ -1504,6 +1462,7 @@ document.addEventListener('touchend', (e) => {
                                             <i class="fas fa-times"></i> Out of Stock
                                         </button>
                                     <% } %>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -1529,6 +1488,53 @@ document.addEventListener('touchend', (e) => {
             <% } %>
         </div>
     </section>
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="display-font">Why Choose Daily Premium?</h2>
+                <p class="lead">Experience the pinnacle of online shopping</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h4 class="accent-font">Premium Delivery</h4>
+                        <p>White-glove delivery service with premium packaging and personalized care for every order.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 class="accent-font">Secure Transactions</h4>
+                        <p>Bank-level security with encrypted payments and fraud protection for complete peace of mind.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-concierge-bell"></i>
+                        </div>
+                        <h4 class="accent-font">Concierge Service</h4>
+                        <p>Personal shopping assistant and dedicated support for an unparalleled luxury experience.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h4 class="accent-font">Premium Quality</h4>
+                        <p>Handpicked premium products with authenticity guarantee and lifetime quality assurance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <!-- Footer -->
     <footer class="premium-footer" id="contact">
@@ -1883,17 +1889,9 @@ function showToast(message, type = 'info') {
 
 // Quick view functionality with dynamic product data
 function quickView(productId) {
-    // Fetch product details for quick view
-    fetch(`/api/product/${productId}`)
-        .then(response => response.json())
-        .then(product => {
-            showQuickViewModal(product);
-        })
-        .catch(error => {
-            console.error('Error fetching product:', error);
-            showToast('Unable to load product details', 'error');
-        });
+    window.location.href = `/viewproduct/${productId}`;
 }
+
 
 // Quick view modal
 function showQuickViewModal(product) {
