@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Basic Resets & Body Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Container for overall page content */
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Heading Styles */
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 2.2em;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 15px;
+    }
+
+    /* Empty Cart Message */
+    .container > p { /* Targets the direct child <p> for "Your cart is empty" */
+      text-align: center;
+      font-size: 1.2em;
+      color: #777;
+      padding: 40px 0;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border: 1px dashed #ddd;
+    }
+
+    /* Cart List Styling */
+    .cart-list {
+      display: flex;
+      flex-direction: column;
+      gap: 25px; /* Space between cart items */
+    }
+
+    /* Individual Cart Item Styling */
+    .cart-item {
+      display: flex;
+      align-items: flex-start; /* Align items to the top */
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #fff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .cart-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-item img {
+      width: 120px; /* Larger image for better visibility */
+      height: 120px;
+      object-fit: cover; /* Ensures image covers the area without distortion */
+      border-radius: 6px;
+      margin-right: 20px;
+      flex-shrink: 0; /* Prevent image from shrinking */
+      border: 1px solid #ddd; /* Subtle border for images */
+    }
+
+    .cart-item .details {
+      flex-grow: 1; /* Allows details to take up remaining space */
+    }
+
+    .cart-item h4 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: #007bff; /* Highlight product title */
+      font-size: 1.3em;
+    }
+
+    .cart-item p {
+      margin: 5px 0;
+      font-size: 0.95em;
+      color: #555;
+    }
+
+    .cart-item p strong {
+        color: #333;
+    }
+
+    .cart-item p:nth-of-type(1) { /* Targeting the short description */
+        font-style: italic;
+        color: #666;
+        font-size: 0.9em;
+    }
+
+    /* Price and Discount Price */
+    .cart-item p:has(b) { /* A bit tricky, but checks if a 'p' contains a bold tag, assume it's for price */
+        font-weight: bold;
+        color: #28a745; /* Green for price */
+    }
+    .cart-item p:has(b) + p { /* Targets the discount price if present */
+        text-decoration: line-through; /* Strikethrough original price if discount exists */
+        color: #dc3545; /* Red for discount price */
+        font-size: 0.9em;
+    }
+    .cart-item p:last-child { /* Targets the quantity paragraph */
+        font-weight: bold;
+        color: #444;
+        margin-top: 15px;
+        padding-top: 10px;
+        border-top: 1px dashed #eee;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .cart-item {
+        flex-direction: column; /* Stack image and details on small screens */
+        align-items: center;
+        text-align: center;
+      }
+
+      .cart-item img {
+        margin-right: 0;
+        margin-bottom: 15px; /* Add space below image */
+        width: 100%; /* Make image full width on small screens */
+        max-width: 150px; /* But keep it from being too big */
+        height: auto;
+      }
+
+      .container {
+        padding: 20px;
+        margin: 10px;
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .container {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Shopping Cart</h1>
+
+    <% if (cartItems.length === 0) { %>
+      <p>Your cart is empty.</p>
+    <% } else { %>
+      <div class="cart-list">
+        <% cartItems.forEach(item => { %>
+          <div class="cart-item">
+            <img src="<%= item.product.thumbnail %>" alt="<%= item.product.title %>">
+            <div class="details">
+              <h4><%= item.product.title %></h4>
+              <p><%= item.product.shortDescription || item.product.description.slice(0, 100) + '...' %></p>
+              <p><b>Price:</b> ₹<%= item.product.price %></p>
+              <% if (item.product.discountPrice) { %>
+                <p><b>Discount Price:</b> ₹<%= item.product.discountPrice %></p>
+              <% } %>
+              <p><b>Quantity:</b> <%= item.quantity %></p>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
