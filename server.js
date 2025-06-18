@@ -249,7 +249,20 @@ app.get('/deletecart', async (req, res) => {
     res.status(500).send("Something went wrong while clearing the cart.");
   }
 });
-
+app.get("/cart/remove/:id",async (req,res)=>{
+  if(!req.cookies.token2)return res.redirect('/login');
+  const id=req.params.id;
+  await User.findOneAndUpdate(
+  { email: req.cookies.token2 }, // or {_id: userId}
+  {
+    $pull: {
+      cart: { productId: req.params.id } // this removes the object with matching productId
+    }
+  },
+  { new: true }
+);
+  res.redirect('/cart');
+})
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
