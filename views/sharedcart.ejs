@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shared Cart</title>
+  <style>
+    :root {
+      --primary-brown: #8B4513;
+      --secondary-brown: #A0522D;
+      --light-brown: #D2B48C;
+      --dark-brown: #654321;
+      --cream: #F5F5DC;
+      --gold: #D4AF37;
+      --white: #FFFFFF;
+      --text-dark: #2C1810;
+      --text-light: #6B5B73;
+      --shadow-light: rgba(139, 69, 19, 0.1);
+      --shadow-medium: rgba(139, 69, 19, 0.2);
+      --shadow-dark: rgba(44, 24, 16, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      background: linear-gradient(135deg, var(--cream) 0%, var(--white) 50%, #faf8f5 100%);
+      padding: 20px;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 80%, rgba(210, 180, 140, 0.2) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(245, 245, 220, 0.3) 0%, transparent 50%);
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: var(--white);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px var(--shadow-dark), 0 0 0 1px rgba(139, 69, 19, 0.05);
+      position: relative;
+      backdrop-filter: blur(10px);
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h3 {
+      color: var(--dark-brown);
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 35px;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-brown), var(--gold));
+      border-radius: 2px;
+    }
+
+    .cart-list {
+      margin-top: 40px;
+    }
+
+    .cart-entry {
+      background: linear-gradient(135deg, var(--cream), var(--white));
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      border: 1px solid rgba(139, 69, 19, 0.1);
+      box-shadow: 0 8px 20px var(--shadow-light);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cart-entry::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+
+    .cart-entry:hover::before {
+      opacity: 1;
+    }
+
+    .cart-entry:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px var(--shadow-medium);
+      border-color: var(--primary-brown);
+    }
+
+    .cart-entry > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cart-entry h4 {
+      margin: 0;
+      flex: 1 1 auto;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark-brown);
+      margin-right: 20px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-shrink: 0;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .view-btn, .create-btn, .delete-btn, .join-btn {
+      background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+      color: var(--white);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .view-btn::before, .create-btn::before, .delete-btn::before, .join-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .view-btn:hover::before, .create-btn:hover::before, .delete-btn:hover::before, .join-btn:hover::before {
+      left: 100%;
+    }
+
+    .view-btn:hover, .create-btn:hover, .join-btn:hover {
+      background: linear-gradient(135deg, var(--secondary-brown), var(--gold));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
+    }
+
+    .delete-btn {
+      background: linear-gradient(135deg, #e53935, #c62828);
+      box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+    }
+
+    .delete-btn:hover {
+      background: linear-gradient(135deg, #c62828, #b71c1c);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(229, 57, 53, 0.4);
+    }
+
+    .delete-btn:active, .view-btn:active, .create-btn:active, .join-btn:active {
+      transform: translateY(0);
+    }
+
+    .create-section {
+      text-align: center;
+      margin-top: 50px;
+      padding: 30px;
+      background: linear-gradient(135deg, rgba(139, 69, 19, 0.05), transparent);
+      border-radius: 15px;
+      border: 2px dashed rgba(139, 69, 19, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .create-section:hover {
+      background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), transparent);
+      border-color: var(--primary-brown);
+    }
+
+    .create-section .create-btn {
+      font-size: 16px;
+      padding: 15px 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .create-section .create-btn::after {
+      content: '+';
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* Join form styling */
+    .join-form {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .join-form input[type="text"] {
+      padding: 10px 15px;
+      font-size: 14px;
+      border: 1px solid rgba(139, 69, 19, 0.2);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s ease;
+      width: 200px;
+      background: var(--white);
+      color: var(--text-dark);
+    }
+
+    .join-form input[type="text"]:focus {
+      border-color: var(--primary-brown);
+      box-shadow: 0 0 8px rgba(139, 69, 19, 0.2);
+    }
+
+    .join-form input[type="text"]::placeholder {
+      color: var(--text-light);
+      opacity: 0.8;
+    }
+
+    /* Form styling */
+    form {
+      display: inline-block;
+      margin: 0;
+    }
+
+    /* Loading state */
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    /* Enhanced focus states for accessibility */
+    .view-btn:focus, .create-btn:focus, .delete-btn:focus, .join-btn:focus {
+      outline: 3px solid rgba(139, 69, 19, 0.3);
+      outline-offset: 2px;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 25px;
+        margin: 10px;
+      }
+
+      .cart-entry {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .cart-entry h4 {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
+      }
+
+      .btn-group {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      h3 {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .btn-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+
+      .view-btn, .delete-btn, .create-btn, .join-btn {
+        width: 100%;
+        text-align: center;
+        padding: 12px 16px;
+      }
+
+      .cart-entry {
+        padding: 20px;
+      }
+
+      .join-form input[type="text"] {
+        width: 100%;
+      }
+    }
+
+    /* Subtle animations */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .cart-entry.loading {
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* No carts message styling */
+    .no-carts-message {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 1.1rem;
+      padding: 40px 0;
+      background: linear-gradient(135deg, rgba(139, 69, 19, 0.03), transparent);
+      border-radius: 12px;
+      border: 1px dashed rgba(139, 69, 19, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>Your Shared Carts</h3>
+    <div class="cart-list">
+      <% if (sharedCarts && sharedCarts.length === 0) { %>
+        <p class="no-carts-message">
+          No shared carts found.
+        </p>
+      <% } else if (sharedCarts) { %>
+        <% sharedCarts.forEach(cart => { %>
+          <div class="cart-entry">
+            <h4>Cart Code: <%= cart.cartCode %></h4>
+            <div class="btn-group">
+              <a href="/sharedcart/view/<%= cart.cartCode %>" class="view-btn">View</a>
+
+              <% if (selectedProduct) { %>
+  <form action="/shared-cart/add" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="productId" value="<%= selectedProduct._id %>">
+    <input type="hidden" name="cartCode" value="<%= cart.cartCode %>">
+    <button type="submit" class="create-btn">Add to This Cart</button>
+  </form>
+<% } %>
+
+              <form action="/shared-cart/delete/<%= cart.cartCode %>" method="POST" onsubmit="return confirmDelete(event, this)">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="delete-btn">Delete</button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <div class="create-section">
+      <a href="/shared-cart/create" class="create-btn">Create New Shared Cart</a>
+      <form action="/shared-cart/join" method="POST" class="join-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="text" name="cartcode" placeholder="Enter cart code" required>
+        <button type="submit" class="join-btn">Join Cart</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function confirmDelete(event, form) {
+      event.preventDefault();
+      if (confirm('Are you sure you want to delete this cart?')) {
+        form.classList.add('loading');
+        form.querySelector('button').disabled = true;
+        form.submit();
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>

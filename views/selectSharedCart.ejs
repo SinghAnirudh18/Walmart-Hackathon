@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Select Shared Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #eef2f3;
+    }
+    h2 {
+      color: #333;
+    }
+    .cart-list {
+      margin-top: 20px;
+    }
+    .cart-entry {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+    }
+    .cart-entry h4 {
+      margin: 0 0 10px 0;
+      color: #444;
+    }
+    form {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+    }
+    .view-btn, .create-btn {
+      background: #4CAF50;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    .create-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Select a Shared Cart to Add: <%= product.title %></h2>
+
+  <div class="cart-list">
+    <% if (sharedCarts.length === 0) { %>
+      <p>No shared carts found.</p>
+    <% } else { %>
+      <% sharedCarts.forEach(cart => { %>
+        <div class="cart-entry">
+          <h4>Cart Code: <%= cart.cartCode %></h4>
+          <form method="POST" action="/add-to-shared-cart">
+            <input type="hidden" name="cartCode" value="<%= cart.cartCode %>" />
+            <input type="hidden" name="productId" value="<%= product._id %>" />
+            <input type="number" name="quantity" value="1" min="1" />
+            <button type="submit" class="view-btn">Add to This Cart</button>
+          </form>
+          <a href="/shared-cart/<%= cart.cartCode %>" class="view-btn">View</a>
+        </div>
+      <% }); %>
+    <% } %>
+  </div>
+
+  <div class="create-section">
+    <a href="/shared-cart/create?productId=<%= product._id %>" class="create-btn">
+      Create New Shared Cart and Add
+    </a>
+  </div>
+
+</body>
+</html>

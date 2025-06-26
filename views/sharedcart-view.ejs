@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shared Cart: <%= cartCode %></title>
+  <script src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      padding: 20px;
+      min-height: 100vh;
+      margin: 0;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 50px;
+      border-radius: 24px;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: #2c3e50;
+      letter-spacing: -0.5px;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 2px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #34495e;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px;
+      background: linear-gradient(135deg, #fce3ec 0%, #f8d7da 100%);
+      border-radius: 16px;
+      margin-bottom: 40px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border: 1px solid rgba(252, 227, 236, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    .cart-list {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 25px;
+      padding: 30px;
+      background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+      border-radius: 20px;
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.08),
+        0 5px 15px rgba(0, 0, 0, 0.05);
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cart-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(168, 237, 234, 0.03) 0%, rgba(254, 214, 227, 0.03) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.12),
+        0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .cart-item:hover::before {
+      opacity: 1;
+    }
+
+    .cart-item img {
+      width: 160px;
+      height: 160px;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .cart-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .item-details {
+      flex-grow: 1;
+      min-width: 0;
+    }
+
+    .item-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #2c3e50;
+      line-height: 1.3;
+    }
+
+    .item-description {
+      font-size: 1rem;
+      color: #6c757d;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .price {
+      font-weight: 700;
+      color: #27ae60;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: #e74c3c;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .discount {
+      background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);
+    }
+
+    .qty {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      color: #6c757d;
+      font-weight: 500;
+    }
+
+    .actions {
+      margin-top: 50px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 160px;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.5px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-chat {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-chat:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-continue {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+    }
+
+    .btn-continue:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(240, 147, 251, 0.4);
+    }
+
+    .btn-remove {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn-remove:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(238, 90, 36, 0.4);
+    }
+
+    /* Chat Window Styles */
+    .chat-toggle-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-toggle-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+    }
+
+    .chat-window {
+      position: fixed;
+      bottom: 0;
+      right: -400px;
+      width: 400px;
+      height: 600px;
+      background: white;
+      border-radius: 16px 16px 0 0;
+      box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .chat-window.open {
+      right: 0;
+    }
+
+    .chat-header {
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .chat-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+
+    .chat-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    #chatBox {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f8f9fa;
+    }
+
+    .message {
+      margin: 10px 0;
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.self {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+      border-radius: 16px 16px 4px 16px;
+    }
+
+    .message.other {
+      background: #e9ecef;
+      color: #333;
+      border-radius: 16px 16px 16px 4px;
+    }
+
+    .sender {
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 4px;
+      opacity: 0.8;
+    }
+
+    .timestamp {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .chat-input-container {
+      padding: 20px;
+      background: white;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    #msgInput {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 14px;
+      border-radius: 25px;
+      border: 1px solid #ddd;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    #msgInput:focus {
+      border-color: #667eea;
+    }
+
+    .send-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .send-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ff4757;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 12px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        margin: 10px;
+      }
+      
+      .cart-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+      }
+      
+      .cart-item img {
+        width: 120px;
+        height: 120px;
+        align-self: center;
+      }
+      
+      .summary {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      .actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .chat-window {
+        width: 100%;
+        right: -100%;
+        height: 70vh;
+      }
+
+      .chat-toggle-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .container {
+        padding: 20px 15px;
+      }
+      
+      .cart-item {
+        padding: 20px;
+      }
+      
+      .summary {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1><i class="fas fa-users"></i> Shared Cart: <%= cartCode %></h1>
+
+    <% if (cartItems.length === 0) { %>
+      <p style="text-align:center; padding: 40px 20px;">This shared cart is currently empty.</p>
+    <% } else { %>
+      <div class="summary">
+        <div>Total Items: <%= cartItems.reduce((sum, item) => sum + item.quantity, 0) %></div>
+        <div>Total Price: ₹ <%= cartItems.reduce((sum, item) => sum + (item.product.discountPrice || item.product.price) * item.quantity, 0) %></div>
+      </div>
+
+      <div class="cart-list">
+        <% cartItems.forEach(item => { %>
+          <div class="cart-item">
+            <img src="<%= item.product.thumbnail %>" alt="<%= item.product.title %>">
+            <div class="item-details">
+              <div class="item-title"><%= item.product.title %></div>
+              <div class="item-description"><%= item.product.shortDescription || item.product.description.slice(0, 100) + '...' %></div>
+              <div class="price">
+                ₹ <%= item.product.discountPrice || item.product.price %>
+                <% if (item.product.discountPrice && item.product.discountPrice !== item.product.price) { %>
+                  <span class="original-price">₹ <%= item.product.price %></span>
+                  <span class="discount"><%= Math.round(((item.product.price - item.product.discountPrice) / item.product.price) * 100) %>% OFF</span>
+                <% } %>
+              </div>
+              <div class="qty">Quantity: <%= item.quantity %></div>
+              <form action="/sharedcart/remove/<%= cartCode %>" method="POST" style="margin-top: 10px;">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="productId" value="<%= item.product._id %>">
+                <button type="submit" class="btn btn-remove"><i class="fas fa-trash"></i> Remove</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <div class="actions">
+        <a href="/" class="btn btn-continue"><i class="fas fa-shopping-bag"></i> Continue Shopping</a>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Recommended for You Section -->
+  <% if (recommended && recommended.length > 0) { %>
+    <div class="container">
+      <h2>Recommended for You</h2>
+      <div class="cart-list">
+        <% recommended.forEach(product => { %>
+          <div class="cart-item">
+            <img src="<%= product.thumbnail %>" alt="<%= product.title %>">
+            <div class="item-details">
+              <div class="item-title"><%= product.title %></div>
+              <div class="item-description"><%= product.shortDescription || product.description.slice(0, 100) + '...' %></div>
+              <div class="price">
+                ₹ <%= product.discountPrice || product.price %>
+                <% if (product.discountPrice && product.discountPrice !== product.price) { %>
+                  <span class="original-price">₹ <%= product.price %></span>
+                  <span class="discount"><%= Math.round(((product.price - product.discountPrice) / product.price) * 100) %>% OFF</span>
+                <% } %>
+              </div>
+              <form action="/shared-cart/add" method="POST" style="margin-top: 10px;">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="cartCode" value="<%= cartCode %>">
+                <input type="hidden" name="productId" value="<%= product._id %>">
+                <button type="submit" class="btn btn-continue"><i class="fas fa-plus-circle"></i> Add to Cart</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Shared Cart List Section -->
+  <div class="container">
+    <h2>Your Shared Carts</h2>
+    <div class="cart-list">
+      <% if (sharedCarts && sharedCarts.length === 0) { %>
+        <p style="text-align: center;">No shared carts found.</p>
+      <% } else { %>
+        <% sharedCarts.forEach(cart => { %>
+          <div class="cart-item">
+            <div><strong>Cart Code:</strong> <%= cart.cartCode %></div>
+            <a href="/sharedcart/view/<%= cart.cartCode %>" class="btn btn-chat">View</a>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+    <div class="actions" style="margin-top: 30px;">
+      <a href="/shared-cart/create" class="btn btn-continue"><i class="fas fa-plus-circle"></i> Create New Shared Cart</a>
+    </div>
+  </div>
+
+  <!-- Chat Toggle Button -->
+  <button class="chat-toggle-btn" onclick="toggleChat()">
+    <i class="fas fa-comments"></i>
+    <div class="notification-badge" id="notificationBadge">0</div>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <h3><i class="fas fa-comments"></i> Chat Room</h3>
+      <button class="chat-close" onclick="toggleChat()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="chatBox"></div>
+    <div class="chat-input-container">
+      <div class="chat-input">
+        <input type="text" id="msgInput" placeholder="Type a message..." autocomplete="off">
+        <button class="send-btn" onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const socket = io();
+    const cartCode = "<%= cartCode %>";
+    const userId = "<%= userId %>";
+    const username = "<%= username %>";
+    let chatOpen = false;
+    let unreadMessages = 0;
+
+    socket.emit('joinCartChat', { cartCode });
+
+    const chatBox = document.getElementById('chatBox');
+    const chatWindow = document.getElementById('chatWindow');
+    const notificationBadge = document.getElementById('notificationBadge');
+
+    function scrollToBottom() {
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      chatWindow.classList.toggle('open', chatOpen);
+      
+      if (chatOpen) {
+        unreadMessages = 0;
+        updateNotificationBadge();
+        document.getElementById('msgInput').focus();
+      }
+    }
+
+    function updateNotificationBadge() {
+      if (unreadMessages > 0 && !chatOpen) {
+        notificationBadge.textContent = unreadMessages > 99 ? '99+' : unreadMessages;
+        notificationBadge.style.display = 'flex';
+      } else {
+        notificationBadge.style.display = 'none';
+      }
+    }
+
+    socket.on('chatHistory', (messages) => {
+      chatBox.innerHTML = '';
+      messages.forEach(msg => addMessage(msg));
+      scrollToBottom();
+    });
+
+    socket.on('newMessage', (msg) => {
+      addMessage(msg);
+      scrollToBottom();
+      
+      if (!chatOpen && msg.sender?._id !== userId) {
+        unreadMessages++;
+        updateNotificationBadge();
+      }
+    });
+
+    function addMessage(msg) {
+      const div = document.createElement('div');
+      div.classList.add('message');
+      div.classList.add(msg.sender?._id === userId ? 'self' : 'other');
+
+      div.innerHTML = `
+        <div class="sender">${msg.sender?.username || 'Unknown'}</div>
+        ${msg.text}
+        <div class="timestamp">${new Date(msg.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      `;
+      chatBox.appendChild(div);
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('msgInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      socket.emit('sendMessage', {
+        cartCode,
+        senderId: userId,
+        text
+      });
+
+      input.value = '';
+    }
+
+    document.getElementById('msgInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (chatOpen && !chatWindow.contains(e.target) && !e.target.closest('.chat-toggle-btn')) {
+      }
+    });
+  </script>
+</body>
+</html>
