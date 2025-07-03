@@ -1653,12 +1653,18 @@ document.addEventListener('touchend', (e) => {
             </div>
 
             <!-- Search and Filter -->
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search for products..." id="searchInput">
-                <button class="search-btn" type="button">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
+            <form action="/search" method="post">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- 👈 Add this line -->
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search for products..." name="prompt">
+        <button class="search-btn" type="submit">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</form>
+
+
+            
 
             <div class="filter-section">
                 <div class="row g-3">
@@ -2497,12 +2503,12 @@ class ProductFilter {
         }
 
         // Apply search filter
-        if (searchValue) {
-            this.filteredProducts = this.filteredProducts.filter(product =>
-                product.title.toLowerCase().includes(searchValue) ||
-                product.category.includes(searchValue)
-            );
-        }
+        // if (searchValue) {
+        //     this.filteredProducts = this.filteredProducts.filter(product =>
+        //         product.title.toLowerCase().includes(searchValue) ||
+        //         product.category.includes(searchValue)
+        //     );
+        // }
 
         // Apply sorting
         if (sortValue) {
@@ -2824,8 +2830,6 @@ function loadFiltersFromURL() {
 function addToSharedCart(productId) {
     window.location.href = `/shared-cart/select/${productId}`;
 }
-
-
-
-
-     </script>
+</script>
+</body>
+</html>
